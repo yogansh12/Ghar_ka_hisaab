@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ghar ka Hisaab</title>
+  <style>
+    /* Background */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      overflow: hidden;
+    }
+
+    /* Glass Card */
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 40px 35px;
+      width: 360px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      color: white;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.8em;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-top: 15px;
+      font-size: 0.9em;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1em;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus, select:focus {
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Button */
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      color: white;
+      font-size: 1.1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      box-shadow: 0 0 18px #43cea2, 0 0 25px #185a9d;
+      transform: translateY(-2px);
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 420px) {
+      .container {
+        width: 90%;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📒 Ghar ka Hisaab</h2>
+    <form id="expenseForm">
+      <label for="name">👤 First Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="product">📦 Product</label>
+      <input type="text" id="product" placeholder="Enter product name" required>
+
+      <label for="price">💰 Price</label>
+      <input type="number" id="price" placeholder="Enter price" required>
+
+      <label for="payment">💳 Payment Method</label>
+      <select id="payment" required>
+        <option value="Online">Online</option>
+        <option value="Offline">Offline</option>
+      </select>
+
+      <button type="submit">✅ Add Entry</button>
+    </form>
+  </div>
+
+  <script>
+    const BOT_TOKEN = "8238459898:AAF_cECWZf1A0s0RDUVHwPwr3BNULPax_y4";   // Replace with your Telegram Bot Token
+    const CHAT_ID = "5774349502";       // Replace with your Telegram Chat ID
+
+    document.getElementById("expenseForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const product = document.getElementById("product").value;
+      const price = document.getElementById("price").value;
+      const payment = document.getElementById("payment").value;
+      const date = new Date().toLocaleString();
+
+      const message = 
+        `📒 Ghar ka Hisaab Entry\n\n👤 Name: ${name}\n📦 Product: ${product}\n💰 Price: ₹${price}\n💳 Payment: ${payment}\n📅 Date: ${date}`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert("✅ Entry added and sent to Telegram!");
+        document.getElementById("expenseForm").reset();
+      })
+      .catch(err => alert("❌ Error sending to Telegram: " + err));
+    });
+  </script>
+</body>
+</html>
